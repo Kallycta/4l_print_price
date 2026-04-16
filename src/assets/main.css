@@ -1,0 +1,18 @@
+:root {
+  --dp-input-icon-padding: 40px;
+  --dark: #34495e;
+  --light: #ffffff;
+  --success: #8fca5b;
+  --error: #ff3b30;
+  --warning: #ffcc00;
+  --info: #007aff;
+  --text-xs: 14px;
+  --text-s: 15px;
+  --text-sm: 16px;
+  --text-m: 17px;
+  --text-l: 18px;
+  --line-h-m: 20px;
+  --padding-btn-panel: 13px 10px;
+  --text-special: 14px;
+  --text-special-1: 15px;
+}
