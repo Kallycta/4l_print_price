@@ -13,7 +13,7 @@ const goBack = (): void => {
 
   setTimeout(() => {
     close_elem?.value && close_elem?.value?.classList.remove('back-click_animation');
-
+    location.href = '/mobile_app/'
   }, 400)
 
 }
@@ -63,9 +63,7 @@ const goBack = (): void => {
 </template>
 
 <style scoped>
-.header_container {
-  padding-top: 10px;
-}
+
 
 .header_container_top {
   position: relative;
@@ -82,5 +80,21 @@ const goBack = (): void => {
 
 .header_title_svg {
   flex: 0.5;
+}
+
+.back-click_animation {
+  animation: back-click 0.3s ease;
+}
+
+@keyframes back-click {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

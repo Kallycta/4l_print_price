@@ -30,7 +30,7 @@ onUnmounted(() => {
   window.pulloadObject.blocked = false
 });
 
-const unlockScroll = ():void => {
+const unlockScroll = (): void => {
   if (scrollableBlock.value) {
     scrollableBlock.value.style.overflow = 'visible'
   }
@@ -40,18 +40,18 @@ const unlockScroll = ():void => {
 </script>
 
 <template>
-  <div ref="scrollableBlock"
-       style="overflow: auto;
-       flex-grow: 1"
-       id="scrollableBlock">
-
-    <HeaderPrice
+  <HeaderPrice
     :parentElementRef="scrollableBlock"
     @unlock-scroll="unlockScroll"
-    />
-    <BodyPrice></BodyPrice>
-  </div>
-  <FooterPrice></FooterPrice>
+  />
+    <div ref="scrollableBlock"
+         style="overflow: auto;
+       flex-grow: 1"
+         id="scrollableBlock">
+      <BodyPrice/>
+    </div>
+    <FooterPrice/>
+
 </template>
 
 <style scoped>
