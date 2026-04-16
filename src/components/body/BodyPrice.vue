@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TabsPrice from "@/components/body/TabsPrice.vue";
-import CardPrice from "@/components/body/CardPrice.vue";
+import TabsPrice from "@/components/body/TabsPrice.vue"
+import CardPrice from "@/components/body/CardPrice.vue"
 </script>
 
 <template>
