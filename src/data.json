@@ -1,0 +1,238 @@
+{
+  "regular": [
+    {
+      "title": "Longe Dog Fresh консервы для собак говядина 100г",
+      "price": 111,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "active": true,
+      "priceTypes": [
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        },
+        {
+          "label": "ООО “Маркет 2",
+          "value": "332"
+        },
+        {
+          "label": "ООО “Маркет 3",
+          "value": "333"
+        },
+        {
+          "label": "ООО “Маркет 4",
+          "value": "334"
+        }
+      ],
+      "id": "32312",
+      "type": "regular"
+    },
+    {
+      "title": "Ponge Dog Fresh консервы для собак говядина 100г",
+      "price": 333,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "active": true,
+      "priceTypes": [
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        }
+      ],
+      "id": "323124",
+      "type": "regular"
+    },
+    {
+      "title": "Gonge Dog Fresh консервы для собак говядина 100г",
+      "price": 222,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "active": false,
+      "priceTypes": [
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        }
+      ],
+      "id": "323125",
+      "type": "regular"
+    }
+  ],
+  "sale": [
+    {
+      "title": "Monge Dog Fresh консервы для собак говядина 100г",
+      "price": 333,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "active": true,
+      "priceTypes": [
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        },
+        {
+          "label": "ООО “Маркет 2",
+          "value": "332"
+        },
+        {
+          "label": "ООО “Маркет 3",
+          "value": "333"
+        },
+        {
+          "label": "ООО “Маркет 4",
+          "value": "334"
+        }
+      ],
+      "id": "32316",
+      "type": "sale"
+    },
+    {
+      "title": "Donge Dog Fresh консервы для собак говядина 100г",
+      "price": 666,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "active": false,
+      "priceTypes": [
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        }
+      ],
+      "id": "323164",
+      "type": "sale"
+    }
+  ],
+  "bonusBuy": [
+    {
+      "title": "Bonge Dog Fresh консервы для собак говядина 100г",
+      "price": 555,
+      "barcode": "8009470013079",
+      "sapCode": "000000000001027890",
+      "count": 1,
+      "bonusText": "3 по цене 2",
+      "active": true,
+      "priceTypes": [
+      {
+        "label": "Ценник FOOD 60х40",
+        "value": "111"
+      },
+      {
+        "label": "Ценник FOOD 70х40",
+        "value": "112"
+      },
+      {
+        "label": "Ценник FOOD 80х40",
+        "value": "113"
+      },
+      {
+        "label": "Ценник FOOD 90х40",
+        "value": "114"
+      }
+    ],
+      "namesPrice": [
+        {
+          "label": "ООО “Маркет 1",
+          "value": "331"
+        }
+      ],
+      "id": "3231265",
+      "type": "bonusBuy"
+    }
+  ]
+
+}

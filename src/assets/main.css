@@ -6,6 +6,7 @@
 	--error: #ff3b30;
 	--warning: #ffcc00;
 	--info: #007aff;
+	--text-xxs: 12px;
 	--text-xs: 14px;
 	--text-s: 15px;
 	--text-sm: 16px;
@@ -13,6 +14,8 @@
 	--text-l: 18px;
 	--line-h-m: 20px;
 	--line-h-s: 17px;
+	--line-h-xs: 16px;
+	--line-h-xxs: 15px;
 	--padding-btn-panel: 13px 10px;
 	--text-special: 14px;
 	--text-special-1: 15px;
@@ -32,6 +35,10 @@
 body {
 	margin: 0;
 	padding: 0;
+	font-family: 'Roboto', sans-serif;
+}
+input {
+	font-family: 'Roboto', sans-serif;
 }
 .back-click_animation {
 	animation: back-click 0.3s ease;
