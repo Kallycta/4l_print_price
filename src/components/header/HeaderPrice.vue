@@ -68,7 +68,6 @@ const goBack = (): void => {
 	display: flex;
 	justify-content: start;
 	align-items: center;
-
 }
 
 .header_title {

@@ -207,23 +207,23 @@
       "bonusText": "3 по цене 2",
       "active": true,
       "priceTypes": [
-      {
-        "label": "Ценник FOOD 60х40",
-        "value": "111"
-      },
-      {
-        "label": "Ценник FOOD 70х40",
-        "value": "112"
-      },
-      {
-        "label": "Ценник FOOD 80х40",
-        "value": "113"
-      },
-      {
-        "label": "Ценник FOOD 90х40",
-        "value": "114"
-      }
-    ],
+        {
+          "label": "Ценник FOOD 60х40",
+          "value": "111"
+        },
+        {
+          "label": "Ценник FOOD 70х40",
+          "value": "112"
+        },
+        {
+          "label": "Ценник FOOD 80х40",
+          "value": "113"
+        },
+        {
+          "label": "Ценник FOOD 90х40",
+          "value": "114"
+        }
+      ],
       "namesPrice": [
         {
           "label": "ООО “Маркет 1",
@@ -234,5 +234,4 @@
       "type": "bonusBuy"
     }
   ]
-
 }

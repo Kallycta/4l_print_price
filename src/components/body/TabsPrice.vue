@@ -29,7 +29,6 @@ const { activeTab } = storeToRefs(store)
 const changeTab = (index: number): void => {
 	activeTab.value = index
 }
-
 </script>
 
 <template>
@@ -41,7 +40,7 @@ const changeTab = (index: number): void => {
 			:class="{ active: activeTab === index }"
 			class="print_price_tab"
 		>
-			{{ name }}  ({{index}})
+			{{ name }} ({{ index }})
 		</div>
 	</div>
 </template>
@@ -58,16 +57,15 @@ const changeTab = (index: number): void => {
 }
 
 .print_price_tab {
-	color: #1D1D1B;
-	text-decoration: underline dotted #1D1D1B;
+	color: #1d1d1b;
+	text-decoration: underline dotted #1d1d1b;
 	text-decoration-thickness: 8%;
 	text-underline-offset: 25%;
 	transition: all 400ms ease;
 }
 .print_price_tab.disabled {
-	color: #7C7C7C;
-	text-decoration: underline dotted #7C7C7C;
-
+	color: #7c7c7c;
+	text-decoration: underline dotted #7c7c7c;
 }
 
 .print_price_tab.active {
