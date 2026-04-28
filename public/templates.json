@@ -1,0 +1,119 @@
+{
+	"data": [
+		{
+			"SCAGR": "01",
+			"BEZEI20": "Ценник FOOD 60х40",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "01_1",
+			"BEZEI20": "Ценник FOOD 60х40 ББ",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "02",
+			"BEZEI20": "Ценник NON-FOOD60х40",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "02_1",
+			"BEZEI20": "Цен NON-FOOD60х40 ББ",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "02_A",
+			"BEZEI20": "Ценник NON-FOOD42х28",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "03",
+			"BEZEI20": "Ценник КГТ 105х73",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "03_1",
+			"BEZEI20": "Ценник КГТ 105х73 ББ",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "04",
+			"BEZEI20": "Ценник мешки 105х73",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "04_1",
+			"BEZEI20": "Цен мешки 105х73 ББ",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "06",
+			"BEZEI20": "Акция 60х40",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "06GW",
+			"BEZEI20": "АкцТоварНедели 60x40",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "06_A",
+			"BEZEI20": "Акция 42х28",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "07",
+			"BEZEI20": "Акция Мешки 105х73",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "07GW",
+			"BEZEI20": "АкцТовНедМешки105х73",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "08",
+			"BEZEI20": "Акция КГТ 85x55",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "08GW",
+			"BEZEI20": "АкцияТовНед КГТ85x55",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "09",
+			"BEZEI20": "Ценник Pharmac 60х40",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "10",
+			"BEZEI20": "Ценник КГТ 85х55",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "11",
+			"BEZEI20": "Акция FOOD 60х40(кг)",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "11GW",
+			"BEZEI20": "АкцТвНдFOOD60х40(кг)",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "14",
+			"BEZEI20": "Акция X по Y",
+			"PAPER_SIZE": "A4"
+		},
+		{
+			"SCAGR": "G1",
+			"BEZEI20": "Этикетка Склад 56х38",
+			"PAPER_SIZE": "G1"
+		},
+		{
+			"SCAGR": "G2",
+			"BEZEI20": "Этикетка безШК 51х33",
+			"PAPER_SIZE": "G2"
+		}
+	]
+}

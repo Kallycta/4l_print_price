@@ -1,10 +1,130 @@
 <script setup lang="ts">
 import SeparatorLine from "@/components/public/SeparatorLine.vue"
+import { useCardsStore } from "@/stores/cards.ts"
+import { getGoodInfo } from "@/api/cardsApi.ts"
+import { ConfirmService } from "@/services/confirmService.ts"
+import { ref } from "vue"
+import SearchModal from "@/components/public/modal/SearchModal.vue"
+import { Tabs, useTabsStore } from "@/stores/tabs.ts"
 
+const cardStore = useCardsStore()
+const isVisibleModal = ref(false)
+const code = ref("")
+const storeTabs = useTabsStore()
 const goToPage = (url: string): void => {
 	setTimeout(() => {
 		location.href = url
 	}, 200)
+}
+const startScan = async (index: number, code: string = ""): Promise<void> => {
+	if (code) {
+		try {
+			let res = { text: "" }
+
+			if (!code) {
+				res =
+					window.Capacitor &&
+					window?.module4lapy?.qrScanner?.startScanMlKitScanner &&
+					(await window?.module4lapy?.qrScanner.startScanMlKitScanner())
+			} else {
+				res = { text: code }
+			}
+
+			if (res.text) {
+				const response = await getGoodInfo({ ean: +res.text }, index)
+
+				if (response?.result) {
+					let action: Tabs = Tabs.DEFAULT
+					const newEan = response.data.data.EAN
+					// Проверяем есть ли ценник в ранее добавленных
+					const scannedElement = cardStore.cards.find(
+						(item) => item.EAN.toString() === newEan.toString(),
+					)
+					if (!scannedElement) {
+						// Если нет, то делаем элемент активным и дополняем список ценников новым элементом
+						response.data.data.CHECKED = true
+						const card = response.data.data
+						card.GSBER_VAL = card.GSBER[0]?.ZZGSBER ?? ""
+						card.CATEGORY = cardStore.getCategoryCard(card)
+						action = card.CATEGORY
+						card.TIMESTAMP = new Date().getTime().toString()
+
+						cardStore.addCards([card])
+						cardStore.highlightCard(card.EAN)
+					} else {
+						// Если да, то прибавляем количество существующего на +1
+						const newCards = cardStore.cards.map((card) => {
+							if (card.EAN.toString() === newEan.toString()) {
+								card.COPIES = Number(card.COPIES) + 1
+								action = card.CATEGORY
+								cardStore.highlightCard(card.EAN)
+							}
+							return card
+						})
+						cardStore.updateCards(newCards)
+					}
+					console.log('Number(storeTabs.TabsIndex[action])', storeTabs.TabsIndex, action )
+					storeTabs.activeTab = Number(storeTabs.TabsIndex[action])
+				} else {
+					console.log("ОШИБКА! ", response?.errorText)
+				}
+			}
+		} catch (e) {
+			await ConfirmService.show({
+				title: "Ошибка",
+				message: (e as Error).message,
+				buttons: [{ index: 1, title: "ОК", async: false }],
+			})
+			console.log(e)
+		}
+	}
+}
+const getGoodInfoByCode = async (): Promise<void> => {
+	const index = 1
+	try {
+		const response = await getGoodInfo({ ean: +code.value }, index)
+
+		if (response?.result) {
+
+			let action: Tabs = Tabs.DEFAULT
+			const newEan = response.data.data.EAN
+			// Проверяем есть ли ценник в ранее добавленных
+			const scannedElement = cardStore.cards.find(
+				(item) => item.EAN.toString() === newEan.toString(),
+			)
+			if (!scannedElement) {
+				// Если нет, то делаем элемент активным и дополняем список ценников новым элементом
+
+				response.data.data.CHECKED = true
+				const card = response.data.data
+				card.GSBER_VAL = card.GSBER[0]?.ZZGSBER ?? ""
+				card.CATEGORY = cardStore.getCategoryCard(card)
+				action = card.CATEGORY
+				card.TIMESTAMP = new Date().getTime().toString()
+
+
+				cardStore.addCards([card])
+			} else {
+				// Если да, то прибавляем количество существующего на +1
+				const newCards = cardStore.cards.map((card) => {
+					if (card.EAN.toString() === newEan.toString()) {
+						card.COPIES = Number(card.COPIES) + 1
+						action = card.CATEGORY
+					}
+					return card
+				})
+				cardStore.updateCards(newCards)
+			}
+			isVisibleModal.value = false
+			code.value = ''
+			console.log('Number(storeTabs.TabsIndex[action])', Number(storeTabs.TabsIndex[action]))
+			storeTabs.activeTab = Number(storeTabs.TabsIndex[action])
+		} else {
+			console.log("ОШИБКА! ", response?.errorText)
+		}
+	} catch (e) {
+		console.log(e)
+	}
 }
 </script>
 
@@ -37,7 +157,11 @@ const goToPage = (url: string): void => {
 				<div class="footer_sub_text">Главная</div>
 			</div>
 
-			<div class="pointer_menu">
+			<div
+				class="pointer_menu"
+				@click="isVisibleModal = true"
+				@close="isVisibleModal = false"
+			>
 				<svg
 					v-wave
 					width="20"
@@ -69,9 +193,19 @@ const goToPage = (url: string): void => {
 				</div>
 			</div>
 
-			<div style="border-radius: 50%" class="container_scan pointer">
-				<img v-wave src="/assets/icons/scan.svg" alt="scan" />
-			</div>
+						<div @click="startScan(4,'4680368316263')" style="border-radius: 50%" class="container_scan pointer">
+							<div style="z-index: 9999999999999999999999999999; position: relative">4</div>
+							<img v-wave src="/assets/icons/scan.svg" alt="scan" />
+						</div>
+
+<!--			<div-->
+<!--				@click="startScan(5, '8429037016877')"-->
+<!--				style="border-radius: 50%"-->
+<!--				class="container_scan pointer"-->
+<!--			>-->
+<!--				<div style="z-index: 9999999999999999999999999999; position: relative">5</div>-->
+<!--				<img v-wave src="/assets/icons/scan.svg" alt="scan" />-->
+<!--			</div>-->
 			<div class="pointer_menu">
 				<svg
 					v-wave
@@ -118,9 +252,76 @@ const goToPage = (url: string): void => {
 			</div>
 		</div>
 	</div>
+
+	<SearchModal v-if="isVisibleModal" is-dragging-prop @close-modal="isVisibleModal = false">
+		<template #title_up> Поиск </template>
+		<template #inputs>
+			<div class="modal_search_text">Введите ШК или артикул</div>
+			<div class="modal_search_container">
+				<div class="modal_search_input">
+					<svg
+						width="17"
+						height="17"
+						viewBox="0 0 15 15"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M5.9375 10C4.80208 10 3.84125 9.60667 3.055 8.82C2.26875 8.03333 1.87542 7.0725 1.875 5.9375C1.87458 4.8025 2.26792 3.84167 3.055 3.055C3.84208 2.26833 4.80292 1.875 5.9375 1.875C7.07208 1.875 8.03313 2.26833 8.82063 3.055C9.60813 3.84167 10.0013 4.8025 10 5.9375C10 6.39583 9.92708 6.82812 9.78125 7.23438C9.63542 7.64062 9.4375 8 9.1875 8.3125L12.6875 11.8125C12.8021 11.9271 12.8594 12.0729 12.8594 12.25C12.8594 12.4271 12.8021 12.5729 12.6875 12.6875C12.5729 12.8021 12.4271 12.8594 12.25 12.8594C12.0729 12.8594 11.9271 12.8021 11.8125 12.6875L8.3125 9.1875C8 9.4375 7.64063 9.63542 7.23438 9.78125C6.82813 9.92708 6.39583 10 5.9375 10ZM5.9375 8.75C6.71875 8.75 7.38292 8.47667 7.93 7.93C8.47708 7.38333 8.75042 6.71917 8.75 5.9375C8.74958 5.15583 8.47625 4.49188 7.93 3.94563C7.38375 3.39938 6.71958 3.12583 5.9375 3.125C5.15542 3.12417 4.49146 3.39771 3.94563 3.94563C3.39979 4.49354 3.12625 5.1575 3.125 5.9375C3.12375 6.7175 3.39729 7.38167 3.94563 7.93C4.49396 8.47833 5.15792 8.75167 5.9375 8.75Z"
+							fill="#777776"
+						/>
+					</svg>
+					<input v-model="code" type="number" />
+				</div>
+
+				<button @click="getGoodInfoByCode">Поиск</button>
+			</div>
+		</template>
+	</SearchModal>
 </template>
 
 <style scoped>
+.modal_search_container button {
+	height: 30px;
+	flex: 0.2;
+	background-color: #ff6a00;
+	color: #ffffff;
+	outline: none;
+	border: 0;
+	border-radius: 5px;
+}
+.modal_search_container {
+	height: 30px;
+	padding: 7px;
+	gap: 5px;
+}
+.modal_search_input {
+	border: 1px solid #777776;
+	border-radius: 8px;
+	flex: 0.8;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	padding-inline: 5px;
+}
+.modal_search_input input {
+	border: 0;
+	width: 100%;
+	outline: none;
+}
+
+.modal_search_container {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.modal_search_text {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	margin-bottom: 5px;
+}
+
 .container_footer {
 	display: flex;
 	justify-content: space-around;

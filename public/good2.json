@@ -1,0 +1,40 @@
+{
+	"data": {
+		"data": {
+			"WERKS": "R307",
+			"MATNR": "000000000001007929",
+			"MATTXT": "Второе лакомство",
+			"MEINS": "ШТ",
+			"EAN": "4680008740137",
+			"SCAGR": "02",
+			"PRICE": 339,
+			"PRICE_1KG": 0,
+			"PRICE_100GR": 0,
+			"ZSTICKER": "",
+			"GSBER": [
+				{
+					"ZZGSBER": "1119",
+					"ZZGTEXT": "ООО \"КОРС\""
+				}
+			],
+			"COPIES": 1,
+			"ACTION": "",
+			"ACTION_GOODSWEEK": "",
+			"BB_DATA": {
+				"BB_SCAGR": "",
+				"BB_Z006_DATA": {
+					"ORG_NAME": "",
+					"PRICE_DATE": "",
+					"BONUS_NAME": "3 по цене 2",
+					"MATERIAL_NUMBER": "",
+					"MATERIAL_NAME": "",
+					"QTY_TEXT": "",
+					"PRICE": 0,
+					"BONUS_PRICE": 0,
+					"WAERS": ""
+				}
+			}
+		}
+	},
+	"result": true
+}

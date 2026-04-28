@@ -32,6 +32,12 @@
 	max-height: 100vh;
 	padding: 10px;
 }
+#app input, #app select {
+	padding: 5px;
+	font-size: var(--text-xxs);
+	line-height: var(--line-h-xxs);
+	color: #1D1D1B;
+}
 body {
 	margin: 0;
 	padding: 0;

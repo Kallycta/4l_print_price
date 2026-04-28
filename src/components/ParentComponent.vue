@@ -4,9 +4,9 @@ import HeaderPrice from "@/components/header/HeaderPrice.vue"
 import BodyPrice from "@/components/body/BodyPrice.vue"
 import { nextTick, onMounted, onUnmounted, ref } from "vue"
 
-const scrollableBlock = ref(null)
+const scrollableBlock = ref<HTMLElement | null>(null)
 const handleScroll = (): void => {
-	if (window?.pulloadObject?.blocked) {
+	if (window?.pulloadObject?.blocked && scrollableBlock.value) {
 		window.pulloadObject.blocked = scrollableBlock.value.scrollTop !== 0
 	}
 }

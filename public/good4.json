@@ -1,0 +1,47 @@
+{
+	"data": {
+		"data": {
+			"WERKS": "R307",
+			"MATNR": "000000000001007929",
+			"MATTXT": "Лакомоство 4",
+			"MEINS": "ШТ",
+			"EAN": "4680368316263",
+			"SCAGR": "02",
+			"PRICE": 3922,
+			"PRICE_1KG": 0,
+			"PRICE_100GR": 0,
+			"ZSTICKER": "",
+			"GSBER": [
+				{
+					"ZZGSBER": "1119",
+					"ZZGTEXT": "ООО \"КОРС\""
+				},
+				{
+					"ZZGSBER": "1129",
+					"ZZGTEXT": "ООО \"КОРС\" 2"
+				},				{
+					"ZZGSBER": "1139",
+					"ZZGTEXT": "ООО \"КОРС\" 3"
+				}
+			],
+			"COPIES": 1,
+			"ACTION": "",
+			"ACTION_GOODSWEEK": "",
+			"BB_DATA": {
+				"BB_SCAGR": "14",
+				"BB_Z006_DATA": {
+					"ORG_NAME": "",
+					"PRICE_DATE": "",
+					"BONUS_NAME": "",
+					"MATERIAL_NUMBER": "",
+					"MATERIAL_NAME": "",
+					"QTY_TEXT": "",
+					"PRICE": 0,
+					"BONUS_PRICE": 0,
+					"WAERS": ""
+				}
+			}
+		}
+	},
+	"result": true
+}

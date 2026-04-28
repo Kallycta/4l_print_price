@@ -27,6 +27,7 @@ export default defineConfigWithVueTs(
     name: 'app/custom-rules',
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'error',
+		'@typescript-eslint/no-explicit-any': 'off'
 
     }
   }

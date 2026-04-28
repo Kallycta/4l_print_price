@@ -9,10 +9,10 @@ const emit = defineEmits<{
 
 const goBack = (): void => {
 	emit("unlockScroll")
-	close_elem?.value && close_elem?.value?.classList.add("back-click_animation")
+	close_elem?.value && (close_elem?.value as HTMLElement).classList.add("back-click_animation")
 
 	setTimeout(() => {
-		close_elem?.value && close_elem?.value?.classList.remove("back-click_animation")
+		close_elem?.value && (close_elem?.value as HTMLElement).classList.remove("back-click_animation")
 		location.href = "/mobile_app/"
 	}, 400)
 }

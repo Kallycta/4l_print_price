@@ -1,0 +1,9 @@
+{
+  "action_goods": {
+  },
+  "default_goods": {
+    "1776169674441":{"EAN":8429037016877,"COPIES":"1","SCAGR":"01","ZZGSBER":"1119","checked":true},
+    "1776169715442":{"EAN":5407007850914,"COPIES":"1","SCAGR":"01","ZZGSBER":"1119","checked":true},
+    "1776169777378":{"EAN":4680008740137,"COPIES":"1","SCAGR":"02","ZZGSBER":"1119","checked":true}
+  }
+}

@@ -1,0 +1,47 @@
+{
+	"data": {
+		"data": {
+			"WERKS": "R307",
+			"MATNR": "000000000001007929",
+			"MATTXT": "Первое лакомство",
+			"MEINS": "ШТ",
+			"EAN": "5407007850914",
+			"SCAGR": "02",
+			"PRICE": 369,
+			"PRICE_1KG": 0,
+			"PRICE_100GR": 0,
+			"ZSTICKER": "",
+			"GSBER": [
+				{
+					"ZZGSBER": "1119",
+					"ZZGTEXT": "ООО \"КОРС\""
+				},
+				{
+					"ZZGSBER": "1129",
+					"ZZGTEXT": "ООО \"КОРС\" 2"
+				},				{
+					"ZZGSBER": "1139",
+					"ZZGTEXT": "ООО \"КОРС\" 3"
+				}
+			],
+			"COPIES": 1,
+			"ACTION": "X",
+			"ACTION_GOODSWEEK": "",
+			"BB_DATA": {
+				"BB_SCAGR": "01",
+				"BB_Z006_DATA": {
+					"ORG_NAME": "",
+					"PRICE_DATE": "",
+					"BONUS_NAME": "3 по цене 2",
+					"MATERIAL_NUMBER": "",
+					"MATERIAL_NAME": "",
+					"QTY_TEXT": "",
+					"PRICE": 0,
+					"BONUS_PRICE": 0,
+					"WAERS": ""
+				}
+			}
+		}
+	},
+	"result": true
+}

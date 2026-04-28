@@ -1,44 +1,39 @@
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
+import { usePriceTypesStore } from "@/stores/priceTypess.ts"
+import { storeToRefs } from "pinia"
+import type { ICompany, IGetGood } from "@/types/cards.ts"
+import CheckboxComponent from "@/components/public/CheckboxComponent.vue"
+import { useCardsStore } from "@/stores/cards.ts"
 
-const is_active = ref(false)
-const namesList = ref([
-	{
-		label: "ООО “Маркет 1",
-		value: "ООО “Маркет 1",
-	},
-	{
-		label: "ООО “Маркет 2",
-		value: "ООО “Маркет 2",
-	},
-	{
-		label: "ООО “Маркет 3",
-		value: "ООО “Маркет 3",
-	},
-	{
-		label: "ООО “Маркет 4",
-		value: "ООО “Маркет 4",
-	},
-])
 
-const priceList = ref([
-	{
-		label: "Ценник FOOD 60х40",
-		value: "Ценник FOOD 60х40",
-	},
-	{
-		label: "Ценник FOOD 70х40",
-		value: "Ценник FOOD 70х40",
-	},
-	{
-		label: "Ценник FOOD 80х40",
-		value: "Ценник FOOD 80х40",
-	},
-	{
-		label: "Ценник FOOD 90х40",
-		value: "Ценник FOOD 90х40",
-	},
-])
+
+const props = defineProps<{
+	card: IGetGood
+}>()
+const namesList = ref<ICompany[]>([])
+
+onMounted(() => {
+	if(props.card.GSBER) {
+		namesList.value = props.card.GSBER
+	}
+})
+
+const typesStore = usePriceTypesStore();
+const {priceTypes} = storeToRefs(typesStore)
+const cardStore = useCardsStore()
+const indexCard:number = cardStore.cards.findIndex((element: IGetGood) => element.EAN === props.card.EAN )
+
+const GSBER_VAL = computed({
+	get: () => cardStore.cards[indexCard]?.GSBER_VAL,
+	set: (value) => cardStore.updateGSBER(indexCard, value ?? 'default')
+});
+
+const SCAGR_VAL = computed({
+	get: () => cardStore.cards[indexCard]?.SCAGR,
+	set: (value) => cardStore.updateSCAGR(indexCard, value ?? 'default')
+});
+
 
 const startX = ref(0)
 const currentX = ref(0)
@@ -71,7 +66,7 @@ const cardStyle = computed(() => {
 		}
 	}
 
-	// Если В финальном положении (карточка уехала влево)
+	// Если в финальном положении (карточка уехала влево)
 	else {
 		// Карточка зафиксирована в крайнем левом положении
 		if (!isDragging.value && currentX.value === -SWIPE_THRESHOLD) {
@@ -98,7 +93,7 @@ const updateTrashVisibility = (x: number): void => {
 
 const onTouchStart = (e: TouchEvent): void => {
 	// Всегда запоминаем начальную позицию
-	startX.value = e.touches[0].clientX
+	startX.value = e.touches[0]?.clientX ?? 0
 	isDragging.value = true
 
 	// Если в финальном положении, currentX уже равен -SWIPE_THRESHOLD
@@ -108,7 +103,7 @@ const onTouchStart = (e: TouchEvent): void => {
 const onTouchMove = (e: TouchEvent): void => {
 	if (!isDragging.value) return
 
-	const deltaX = e.touches[0].clientX - startX.value
+	const deltaX = e.touches[0]?.clientX ?? 0 - startX.value
 
 	if (!is_finish.value) {
 		if (deltaX < 0) {
@@ -119,8 +114,8 @@ const onTouchMove = (e: TouchEvent): void => {
 		}
 	} else {
 		//  Финальный режим (карточка уехала влево)
-		// Свайп вправо (положительные значения) - возвращаем карточку
-		// Но не даем уехать дальше 0
+		// Свайп вправо (положительные значения)  возвращаем карточку
+		// но не даем уехать дальше 0
 		const currentPosition = currentX.value
 		const newX = Math.min(0, currentPosition + deltaX)
 
@@ -128,7 +123,7 @@ const onTouchMove = (e: TouchEvent): void => {
 		if (newX <= 0 && newX >= -SWIPE_THRESHOLD) {
 			currentX.value = newX
 
-			// Если вернулись больше чем на RETURN_THRESHOLD, прячем корзину
+			// Если вернулись больше чем на RETURN_THRESHOLD прячем корзину
 			if (newX > -RETURN_THRESHOLD) {
 				showTrash.value = false
 			} else {
@@ -142,8 +137,8 @@ const onTouchEnd = (): void => {
 	isDragging.value = false
 
 	if (!is_finish.value) {
-		// Режим 1: Нормальный режим
-		// Если свайп достаточно большой и показывает корзину
+		// Нормальный режим
+		// если свайп достаточно большой и показывает корзину
 		if (currentX.value <= -SWIPE_THRESHOLD && showTrash.value) {
 			// Фиксируем в крайнем положении
 			currentX.value = -SWIPE_THRESHOLD
@@ -154,8 +149,8 @@ const onTouchEnd = (): void => {
 			resetPosition()
 		}
 	} else {
-		// Режим 2: Финальный режим
-		// Если карточка вернулась достаточно близко к началу (меньше -RETURN_THRESHOLD)
+		// Финальный режим
+		// если карточка вернулась достаточно близко к началу (меньше -RETURN_THRESHOLD)
 		if (currentX.value > -RETURN_THRESHOLD) {
 			// Полностью возвращаем карточку
 			resetPosition()
@@ -176,17 +171,33 @@ const resetPosition = (): void => {
 }
 
 const onChangeNames = (value: string): void => {
+
 	console.log(value)
 }
 
 const onChangePrice = (value: string): void => {
 	console.log(value)
 }
+
+const checkboxValue = ref(!!props.card.CHECKED)
+
+const onChangeCB = (value: boolean, EAN: string):void => {
+	const newCards = cardStore.cards.map((card) => {
+		if(card.EAN.toString() === EAN.toString()) {
+			card.CHECKED = value
+		}
+		return card
+	})
+	cardStore.updateCards(newCards)
+}
+
 </script>
 
 <template>
+
 	<div
 		class="print_price_card"
+		:class="{'action-card': card.ACTION === 'X', 'active-card': card.CHECKED}"
 		ref="cardContainerRef"
 		:style="cardStyle"
 		@touchstart="onTouchStart"
@@ -196,64 +207,58 @@ const onChangePrice = (value: string): void => {
 		<div>
 			<div class="print_price_card_title">
 				<div class="print_price_card_title_icon">
-					<svg
-						v-if="!is_active"
-						class="print_inactive_svg"
-						width="15"
-						height="15"
-						viewBox="0 0 15 15"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M4.10352 0.5H10.8965C11.1016 0.500068 11.2983 0.581549 11.4434 0.726562C11.5884 0.871598 11.6699 1.06835 11.6699 1.27344V4.46191H13.1602C13.5154 4.46191 13.8562 4.60337 14.1074 4.85449C14.3586 5.10569 14.5 5.44651 14.5 5.80176V10.8965C14.4999 11.2517 14.3586 11.5926 14.1074 11.8438C13.8562 12.0948 13.5153 12.2363 13.1602 12.2363H11.1035V13.7266C11.1035 13.9317 11.022 14.1284 10.877 14.2734C10.7319 14.4184 10.5352 14.5 10.3301 14.5H4.66992C4.46482 14.5 4.26811 14.4184 4.12305 14.2734C3.97801 14.1284 3.89652 13.9317 3.89648 13.7266V12.2363H1.83984C1.48467 12.2363 1.14378 12.0948 0.892578 11.8438C0.641411 11.5926 0.500068 11.2517 0.5 10.8965V5.80176C0.500034 5.44651 0.641381 5.10569 0.892578 4.85449C1.14379 4.60337 1.48464 4.46191 1.83984 4.46191H3.33008V1.27344C3.33012 1.06876 3.41237 0.87113 3.55664 0.727539L3.55859 0.726562C3.70215 0.582364 3.89892 0.500069 4.10352 0.5ZM4.31152 14.085H10.6885V9.97168H4.31152V14.085ZM10.8965 5.72656C10.2299 5.72656 9.68868 6.26705 9.68848 6.93359C9.68848 7.25383 9.81557 7.56163 10.042 7.78809C10.2685 8.01455 10.5762 8.1416 10.8965 8.1416H12.0283C12.3484 8.1416 12.6554 8.01436 12.8818 7.78809C13.1083 7.56163 13.2363 7.25385 13.2363 6.93359C13.2362 6.61347 13.1082 6.30645 12.8818 6.08008C12.6554 5.85373 12.3485 5.72657 12.0283 5.72656H10.8965ZM3.74512 4.46191H11.2549V0.915039H3.74512V4.46191Z"
-							fill="white"
-							stroke="#777776"
-						/>
-					</svg>
-					<svg
-						v-if="is_active"
-						class="print_active_svg"
-						width="15"
-						height="15"
-						viewBox="0 0 15 15"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M4.10352 0.5H10.8965C11.1016 0.500068 11.2983 0.581549 11.4434 0.726562C11.5884 0.871598 11.6699 1.06835 11.6699 1.27344V4.46191H13.1602C13.5154 4.46191 13.8562 4.60337 14.1074 4.85449C14.3586 5.10569 14.5 5.44651 14.5 5.80176V10.8965C14.4999 11.2517 14.3586 11.5926 14.1074 11.8438C13.8562 12.0948 13.5153 12.2363 13.1602 12.2363H11.1035V13.7266C11.1035 13.9317 11.022 14.1284 10.877 14.2734C10.7319 14.4184 10.5352 14.5 10.3301 14.5H4.66992C4.46482 14.5 4.26811 14.4184 4.12305 14.2734C3.97801 14.1284 3.89652 13.9317 3.89648 13.7266V12.2363H1.83984C1.48467 12.2363 1.14378 12.0948 0.892578 11.8438C0.641411 11.5926 0.500068 11.2517 0.5 10.8965V5.80176C0.500034 5.44651 0.641381 5.10569 0.892578 4.85449C1.14379 4.60337 1.48464 4.46191 1.83984 4.46191H3.33008V1.27344C3.33012 1.06876 3.41237 0.87113 3.55664 0.727539L3.55859 0.726562C3.70215 0.582364 3.89892 0.500069 4.10352 0.5ZM4.31152 14.085H10.6885V9.97168H4.31152V14.085ZM10.8965 5.72656C10.2299 5.72656 9.68868 6.26705 9.68848 6.93359C9.68848 7.25383 9.81557 7.56163 10.042 7.78809C10.2685 8.01455 10.5762 8.1416 10.8965 8.1416H12.0283C12.3484 8.1416 12.6554 8.01436 12.8818 7.78809C13.1083 7.56163 13.2363 7.25385 13.2363 6.93359C13.2362 6.61347 13.1082 6.30645 12.8818 6.08008C12.6554 5.85373 12.3485 5.72657 12.0283 5.72656H10.8965ZM3.74512 4.46191H11.2549V0.915039H3.74512V4.46191Z"
-							fill="#34C759"
-							stroke="#00860D"
-						/>
-					</svg>
+					<CheckboxComponent
+						v-model="checkboxValue"
+						:checked="!!card.CHECKED"
+						:name="'name-checkbox-card' + card.EAN"
+						@on-change-value="(e) => onChangeCB(e?.target.checked, card.EAN)"
+						:label="card.MATTXT"
+					/>
 				</div>
-				<div class="print_price_card_title_icon">
-					Monge Dog Fresh консервы для собак говядина 100г
+			</div>
+			<div v-if="card.BB_DATA.BB_SCAGR" class="print_price_card_subtitle">
+				<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<circle cx="7.5" cy="7.5" r="7.5" fill="#FF6A00"/>
+					<path d="M3.62207 5.02393V4.53516C3.62207 4.18392 3.69824 3.86442 3.85059 3.57666C4.00293 3.2889 4.2251 3.05827 4.51709 2.88477C4.81331 2.71126 5.17301 2.62451 5.59619 2.62451C6.02783 2.62451 6.38965 2.71126 6.68164 2.88477C6.97786 3.05827 7.20003 3.2889 7.34814 3.57666C7.50049 3.86442 7.57666 4.18392 7.57666 4.53516V5.02393C7.57666 5.3667 7.50049 5.68197 7.34814 5.96973C7.20003 6.25749 6.97998 6.48812 6.68799 6.66162C6.396 6.83512 6.0363 6.92188 5.60889 6.92188C5.18148 6.92188 4.81966 6.83512 4.52344 6.66162C4.22721 6.48812 4.00293 6.25749 3.85059 5.96973C3.69824 5.68197 3.62207 5.3667 3.62207 5.02393ZM4.7583 4.53516V5.02393C4.7583 5.18473 4.78792 5.33708 4.84717 5.48096C4.91064 5.62061 5.00586 5.73486 5.13281 5.82373C5.25977 5.9126 5.41846 5.95703 5.60889 5.95703C5.79932 5.95703 5.95378 5.9126 6.07227 5.82373C6.19499 5.73486 6.28597 5.62061 6.34521 5.48096C6.40869 5.33708 6.44043 5.18473 6.44043 5.02393V4.53516C6.44043 4.37012 6.40869 4.21566 6.34521 4.07178C6.28597 3.9279 6.19287 3.81152 6.06592 3.72266C5.9432 3.63379 5.78662 3.58936 5.59619 3.58936C5.40999 3.58936 5.25342 3.63379 5.12646 3.72266C5.00374 3.81152 4.91064 3.9279 4.84717 4.07178C4.78792 4.21566 4.7583 4.37012 4.7583 4.53516ZM8.05908 10.2227V9.73389C8.05908 9.38688 8.13525 9.0695 8.2876 8.78174C8.44417 8.49398 8.67057 8.26335 8.9668 8.08984C9.26302 7.91634 9.62061 7.82959 10.0396 7.82959C10.4754 7.82959 10.8394 7.91634 11.1313 8.08984C11.4233 8.26335 11.6434 8.49398 11.7915 8.78174C11.9438 9.0695 12.02 9.38688 12.02 9.73389V10.2227C12.02 10.5697 11.9438 10.887 11.7915 11.1748C11.6434 11.4626 11.4233 11.6932 11.1313 11.8667C10.8436 12.0402 10.4839 12.127 10.0522 12.127C9.62907 12.127 9.26725 12.0402 8.9668 11.8667C8.67057 11.6932 8.44417 11.4626 8.2876 11.1748C8.13525 10.887 8.05908 10.5697 8.05908 10.2227ZM9.20166 9.73389V10.2227C9.20166 10.3877 9.23551 10.5422 9.30322 10.686C9.37093 10.8257 9.46826 10.9399 9.59521 11.0288C9.7264 11.1177 9.87874 11.1621 10.0522 11.1621C10.2638 11.1621 10.431 11.1177 10.5537 11.0288C10.6764 10.9399 10.7632 10.8257 10.814 10.686C10.8647 10.5422 10.8901 10.3877 10.8901 10.2227V9.73389C10.8901 9.56885 10.8584 9.4165 10.7949 9.27686C10.7314 9.13298 10.6362 9.0166 10.5093 8.92773C10.3866 8.83887 10.23 8.79443 10.0396 8.79443C9.85335 8.79443 9.69678 8.83887 9.56982 8.92773C9.4471 9.0166 9.354 9.13298 9.29053 9.27686C9.23128 9.4165 9.20166 9.56885 9.20166 9.73389ZM10.4585 4.07812L5.94531 11.3018L5.11377 10.8384L9.62695 3.61475L10.4585 4.07812Z" fill="white"/>
+				</svg>
+				<div class="print_price_card_subtitle-text">
+					{{card.BB_DATA?.BB_Z006_DATA?.BONUS_NAME}}
 				</div>
 			</div>
 			<div class="print_price_card_price">
-				<div class="print_price_card_price-left">
-					<div class="print_price_card_price-left_txt">Цена:</div>
-					<div class="print_price_card_price-left_digits">444 руб.</div>
+				<div class="print_price_card_price-left-1">
+						<svg v-if="card.ACTION === 'X' " width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<circle cx="7.5" cy="7.5" r="7.5" fill="#FF6A00"/>
+							<path d="M3.62207 5.02393V4.53516C3.62207 4.18392 3.69824 3.86442 3.85059 3.57666C4.00293 3.2889 4.2251 3.05827 4.51709 2.88477C4.81331 2.71126 5.17301 2.62451 5.59619 2.62451C6.02783 2.62451 6.38965 2.71126 6.68164 2.88477C6.97786 3.05827 7.20003 3.2889 7.34814 3.57666C7.50049 3.86442 7.57666 4.18392 7.57666 4.53516V5.02393C7.57666 5.3667 7.50049 5.68197 7.34814 5.96973C7.20003 6.25749 6.97998 6.48812 6.68799 6.66162C6.396 6.83512 6.0363 6.92188 5.60889 6.92188C5.18148 6.92188 4.81966 6.83512 4.52344 6.66162C4.22721 6.48812 4.00293 6.25749 3.85059 5.96973C3.69824 5.68197 3.62207 5.3667 3.62207 5.02393ZM4.7583 4.53516V5.02393C4.7583 5.18473 4.78792 5.33708 4.84717 5.48096C4.91064 5.62061 5.00586 5.73486 5.13281 5.82373C5.25977 5.9126 5.41846 5.95703 5.60889 5.95703C5.79932 5.95703 5.95378 5.9126 6.07227 5.82373C6.19499 5.73486 6.28597 5.62061 6.34521 5.48096C6.40869 5.33708 6.44043 5.18473 6.44043 5.02393V4.53516C6.44043 4.37012 6.40869 4.21566 6.34521 4.07178C6.28597 3.9279 6.19287 3.81152 6.06592 3.72266C5.9432 3.63379 5.78662 3.58936 5.59619 3.58936C5.40999 3.58936 5.25342 3.63379 5.12646 3.72266C5.00374 3.81152 4.91064 3.9279 4.84717 4.07178C4.78792 4.21566 4.7583 4.37012 4.7583 4.53516ZM8.05908 10.2227V9.73389C8.05908 9.38688 8.13525 9.0695 8.2876 8.78174C8.44417 8.49398 8.67057 8.26335 8.9668 8.08984C9.26302 7.91634 9.62061 7.82959 10.0396 7.82959C10.4754 7.82959 10.8394 7.91634 11.1313 8.08984C11.4233 8.26335 11.6434 8.49398 11.7915 8.78174C11.9438 9.0695 12.02 9.38688 12.02 9.73389V10.2227C12.02 10.5697 11.9438 10.887 11.7915 11.1748C11.6434 11.4626 11.4233 11.6932 11.1313 11.8667C10.8436 12.0402 10.4839 12.127 10.0522 12.127C9.62907 12.127 9.26725 12.0402 8.9668 11.8667C8.67057 11.6932 8.44417 11.4626 8.2876 11.1748C8.13525 10.887 8.05908 10.5697 8.05908 10.2227ZM9.20166 9.73389V10.2227C9.20166 10.3877 9.23551 10.5422 9.30322 10.686C9.37093 10.8257 9.46826 10.9399 9.59521 11.0288C9.7264 11.1177 9.87874 11.1621 10.0522 11.1621C10.2638 11.1621 10.431 11.1177 10.5537 11.0288C10.6764 10.9399 10.7632 10.8257 10.814 10.686C10.8647 10.5422 10.8901 10.3877 10.8901 10.2227V9.73389C10.8901 9.56885 10.8584 9.4165 10.7949 9.27686C10.7314 9.13298 10.6362 9.0166 10.5093 8.92773C10.3866 8.83887 10.23 8.79443 10.0396 8.79443C9.85335 8.79443 9.69678 8.83887 9.56982 8.92773C9.4471 9.0166 9.354 9.13298 9.29053 9.27686C9.23128 9.4165 9.20166 9.56885 9.20166 9.73389ZM10.4585 4.07812L5.94531 11.3018L5.11377 10.8384L9.62695 3.61475L10.4585 4.07812Z" fill="white"/>
+						</svg>
+					<div class="print_price_card_price-left">
+						<div class="print_price_card_price-left_txt">Цена:</div>
+						<div class="print_price_card_price-left_digits">{{card.PRICE}} руб.</div>
+					</div>
 				</div>
+
 				<div class="print_price_card_price-right">
-					<select @change="(e) => onChangeNames(e.target.value)">
-						<option v-for="elem in namesList" :value="elem.value" :key="elem.value">
-							{{ elem.label }}
+
+					<select v-if="namesList.length > 1" v-model="GSBER_VAL" @change="(e: Event) => onChangeNames((e.target as HTMLSelectElement).value)" >
+						<option v-for="(elem) in namesList"  :value="elem.ZZGSBER" :key="elem.ZZGSBER" >
+							{{ elem.ZZGTEXT }}
 						</option>
 					</select>
+					<div v-if="namesList.length === 1">
+						{{namesList[0]?.ZZGTEXT ?? ''}}
+					</div>
 				</div>
 			</div>
 			<div class="print_price_card_count">
 				<div class="print_price_card_count-left">
 					<div class="print_price_card_count-left_txt">Кол-во:</div>
 					<div class="print_price_card_count-left_digits">
-						<input type="number" />
+						<input type="number" :value="card.COPIES" min="1" />
 					</div>
 				</div>
 				<div class="print_price_card_count-right">
-					<select @change="(e) => onChangePrice(e.target.value)">
-						<option v-for="elem in priceList" :value="elem.value" :key="elem.value">
+					<select v-model="SCAGR_VAL" @change="(e: Event) => onChangePrice((e.target as HTMLSelectElement).value)">
+						<option v-for="elem in priceTypes" :value="elem.value" :key="elem.value">
 							{{ elem.label }}
 						</option>
 					</select>
@@ -262,11 +267,11 @@ const onChangePrice = (value: string): void => {
 			<div class="print_price_card_info">
 				<div class="print_price_card_info_left">
 					<div class="print_price_card_info_left_SHK">ШК:</div>
-					<div class="print_price_card_info_left_digits">8009470013079</div>
+					<div class="print_price_card_info_left_digits">{{card.EAN}}</div>
 				</div>
 				<div class="print_price_card_info_right">
 					<div class="print_price_card_info_right_SAP">Код SAP:</div>
-					<div class="print_price_card_info_right_digits">000000000001027890</div>
+					<div class="print_price_card_info_right_digits">{{Number(card.MATNR)}}</div>
 				</div>
 			</div>
 		</div>
@@ -290,10 +295,45 @@ const onChangePrice = (value: string): void => {
 </template>
 
 <style scoped>
+.print_price_card_price-right {
+	font-size: var(--text-xxs);
+	line-height: var(--line-h-xxs);
+	color: #1D1D1B;
+}
+.print_price_card_subtitle {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin-bottom: 15px;
+}
+.print_price_card_subtitle svg {
+	display: flex;
+}
+.print_price_card_subtitle-text {
+	font-weight: 500;
+	font-size: 15px;
+	line-height: 15px;
+	color: #FF6A00;
+}
+
+.print_price_card_price-left-1 {
+	display: flex;
+	gap: 4px;
+	align-items: center;
+}
+.print_price_card_price-left-1 svg {
+	display: flex;
+}
 .print_price_card {
 	padding: 5px;
 	border: 1px solid #777776;
 	border-radius: 5px;
+}
+.print_price_card.active-card {
+	border-color: #FF6A00;
+}
+.print_price_card.action-card {
+	background: #FFFCF0;
 }
 
 .print_price_card select {
@@ -337,7 +377,7 @@ const onChangePrice = (value: string): void => {
 
 .print_price_card_price-left {
 	display: flex;
-	gap: 13px;
+	gap: 6px;
 	align-items: center;
 }
 
